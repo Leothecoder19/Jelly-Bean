@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <title>Login form</title>
+    <style>
+      @import url("https://googleapis.com");
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #110704;
+        font-family: Poppins;
+      }
+      .wrapper {
+        position: relative;
+        width: 750px;
+        height: 450px;
+        background: transparent;
+        border: 2px solid #543422;
+        overflow: hidden;
+        box-shadow: 0 0 25px rgba(84, 52, 34, 0.4);
+      }
+      .wrapper .form-box {
+        position: absolute;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .wrapper .form-box.login {
+        left: 0;
+        padding: 0 60px 0 40px;
+      }
+      .wrapper .form-box.login .animation {
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        transition: 0.7s ease;
+        transition-delay: calc(0.1s * var(--j));
+      }
+      .wrapper.active .form-box.login .animation {
+        transform: translateX(-120%);
+        opacity: 0;
+        filter: blur(10px);
+        transition-delay: calc(0.1s * var(--i));
+      }
+      .wrapper .form-box.register {
+        right: 0;
+        padding: 0 40px 0 60px;
+        pointer-events: none;
+      }
+      .wrapper.active .form-box.register {
+        pointer-events: auto;
+      }
+      .wrapper .form-box.register .animation {
+        transform: translateX(120%);
+        opacity: 0;
+        filter: blur(10px);
+        transition: 0.7s ease;
+        transition-delay: calc(0.1s * var(--j));
+      }
+      .wrapper.active .form-box.register .animation {
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        transition-delay: calc(0.1s * var(--i));
+      }
+      .form-box h2 {
+        font-size: 32px;
+        color: #e6ccb2;
+        text-align: center;
+      }
+      .form-box .input-box {
+        position: relative;
+        width: 100%;
+        height: 50px;
+        margin: 25px 0;
+      }
+      .input-box input {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        border-bottom: 2px solid #b58263;
+        transition: 0.5s;
+        color: white;
+        font-size: 16px;
+        font-weight: 500;
+        padding-right: 23px;
+      }
+      .input-box input:focus,
+      .input-box input:valid {
+        border-bottom-color: #ddb892;
+      }
+      .input-box label {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: #b58263;
+        pointer-events: none;
+        transition: 0.5s;
+      }
+      .input-box input:focus ~ label,
+      .input-box input:valid ~ label {
+        top: -5px;
+        color: #ddb892;
+      }
+      .input-box i {
+        position: absolute;
+        top: 50%;
+        right: 0;
+        transform: translateY(-50%);
+        font-size: 18px;
+        color: #b58263;
+        transition: 0.5s;
+      }
+      .input-box input:focus ~ i,
+      .input-box input:valid ~ i {
+        color: #ddb892;
+      }
+      .btn {
+        position: relative;
+        width: 100%;
+        height: 45px;
+        background: transparent;
+        border: 2px solid #7f5539;
+        outline: none;
+        border-radius: 40px;
+        cursor: pointer;
+        font-size: 16px;
+        color: #e6ccb2;
+        font-weight: 600;
+        z-index: 1;
+        overflow: hidden;
+      }
+      .btn::before {
+        content: "";
+        position: absolute;
+        top: -100%;
+        left: 0;
+        width: 100%;
+        height: 300%;
+        background: linear-gradient(180deg, #2b1810, #543422, #2b1810, #543422);
+        z-index: -1;
+        transition: 0.5s;
+      }
+      .btn:hover::before {
+        top: 0;
+      }
+      .form-box .logreg-link {
+        font-size: 14.5px;
+        color: #b58263;
+        text-align: center;
+        margin: 20px 0 10px;
+      }
+      .logreg-link p a {
+        color: #ddb892;
+        text-decoration: none;
+        font-weight: 600;
+      }
+      .logreg-link p a:hover {
+        text-decoration: underline;
+      }
+      .wrapper .info-text {
+        position: absolute;
+        top: 0;
+        width: 50%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .wrapper .info-text.login {
+        right: 0;
+        text-align: right;
+        padding: 0 40px 60px 150px;
+      }
+      .wrapper .info-text.login .animation {
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        transition: 0.7s ease;
+        transition-delay: calc(0.1s * var(--j));
+      }
+      .wrapper.active .info-text.login .animation {
+        transform: translateX(-120%);
+        opacity: 0;
+        filter: blur(10px);
+        transition-delay: calc(0.1s * var(--i));
+      }
+      .wrapper .info-text.register {
+        left: 0;
+        text-align: left;
+        padding: 0 150px 60px 40px;
+        pointer-events: none;
+      }
+      .wrapper.active .info-text.register {
+        pointer-events: auto;
+      }
+      .wrapper .info-text.register .animation {
+        transform: translateX(-120%);
+        opacity: 0;
+        filter: blur(10px);
+        transition: 0.7s ease;
+        transition-delay: calc(0.1s * var(--j));
+      }
+      .wrapper.active .info-text.register .animation {
+        transform: translateX(0);
+        opacity: 1;
+        filter: blur(0);
+        transition-delay: calc(0.1s * var(--i));
+      }
+      .info-text h2 {
+        font-size: 36px;
+        color: #e6ccb2;
+        line-height: 1.3;
+        text-transform: uppercase;
+      }
+      .info-text p {
+        font-size: 16px;
+        color: #b58263;
+      }
+      .wrapper .background-ani {
+        position: absolute;
+        top: -4px;
+        right: 0;
+        width: 850px;
+        height: 600px;
+        background: linear-gradient(45deg, #110704, #2b1810);
+        transform: rotate(10deg) skewY(40deg);
+        transform-origin: bottom right;
+        border-bottom: 2px solid #543422;
+        transition: 1.5s ease;
+        transition-delay: 1.6s;
+      }
+      .wrapper.active .background-ani {
+        transform: rotate(0) skewY(0);
+        transition-delay: 0.5s;
+      }
+      .wrapper .background-ani2 {
+        position: absolute;
+        top: 100%;
+        left: 250px;
+        width: 850px;
+        height: 700px;
+        background: #110704;
+        transform: rotate(0) skewY(0);
+        transform-origin: bottom left;
+        border-top: 2px solid #543422;
+        transition: 1.5s ease;
+        transition-delay: 0.5s;
+      }
+      .wrapper.active .background-ani2 {
+        transform: rotate(-11deg) skewY(-41deg);
+        transition-delay: 1.2s;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <span class="background-ani"></span>
+      <span class="background-ani2"></span>
+
+      <div class="form-box login">
+        <h2 class="animation" style="--i: 0; --j: 21">Login</h2>
+        <form action="#">
+          <div class="input-box animation" style="--i: 1; --j: 22">
+            <input type="text" required />
+            <label>Username</label>
+            <i class="bx bxs-user"></i>
+          </div>
+          <div class="input-box animation" style="--i: 2; --j: 23">
+            <input type="password" required />
+            <label>Password</label>
+            <i class="bx bxs-lock-alt"></i>
+          </div>
+          <button type="submit" class="btn animation" style="--i: 3; --j: 24">
+            Login
+          </button>
+          <div class="logreg-link animation" style="--i: 4; --j: 25">
+            <p>
+              Don't have an account?
+              <a href="#" class="register-link">Sign up</a>
+            </p>
+          </div>
+        </form>
+      </div>
+      <div class="info-text login">
+        <h2 class="animation" style="--i: 0; --j: 20">Welcome Back!</h2>
+        <p class="animation" style="--i: 1; --j: 21">
+          Lorem ipsum, dolor sit amet consectetur adipisicing.
+        </p>
+      </div>
+
+      <div class="form-box register">
+        <h2 class="animation" style="--i: 17; --j: 0">Sign Up</h2>
+        <form action="#">
+          <div class="input-box animation" style="--i: 18; --j: 1">
+            <input type="text" required />
+            <label>Username</label>
+            <i class="bx bxs-user"></i>
+          </div>
+          <div class="input-box animation" style="--i: 19; --j: 2">
+            <input type="email" required />
+            <label>Email</label>
+            <i class="bx bxs-envelope"></i>
+          </div>
+          <div class="input-box animation" style="--i: 20; --j: 3">
+            <input type="password" required />
+            <label>Password</label>
+            <i class="bx bxs-lock-alt"></i>
+          </div>
+          <button type="submit" class="btn animation" style="--i: 21; --j: 4">
+            Sign Up
+          </button>
+          <div class="logreg-link animation" style="--i: 22; --j: 5">
+            <p>
+              Already have an account? <a href="#" class="login-link">Login</a>
+            </p>
+          </div>
+        </form>
+      </div>
+      <div class="info-text register">
+        <h2 class="animation" style="--i: 17; --j: 0">Welcome Back!</h2>
+        <p class="animation" style="--i: 18; --j: 1">
+          Lorem ipsum, dolor sit amet consectetur adipisicing.
+        </p>
+      </div>
+    </div>
+
+    <script>
+      const wrapper = document.querySelector(".wrapper");
+      const registerLink = document.querySelector(".register-link");
+      const loginLink = document.querySelector(".login-link");
+
+      registerLink.onclick = () => {
+        wrapper.classList.add("active");
+      };
+
+      loginLink.onclick = () => {
+        wrapper.classList.remove("active");
+      };
+    </script>
+  </body>
+</html>
